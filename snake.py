@@ -30,6 +30,19 @@ class Field():
         self.Timer = [[random.randint(1, time-1) for j in range(self.y)] for i in range(self.x)]
         self.numbers = numbers
         
+    def MakeOneFood(self):
+        x = random.randint(0, len(self.data)-1)
+        y = random.randint(0, len(self.data[x])-1)
+        point = Point(x, y)
+        while (self[point] != 0):
+            if (point.x > 2*len(self.data) and point.y > 2*len(self.data[x])):
+                return
+            point.y += 1
+            if (point.y >= len(self.data[x])):
+                point.x += 1
+                point.y = 0
+        self[point] = 1
+        
     def tick(self):
         """Игровое поле делает 1 ход. Если таймер клетки сработал и она пустая, в ней появляется еда.
            Каждый ход тикают только таймеры пустых клеток."""
@@ -258,7 +271,7 @@ class Point():
 
 class Snake():
     """Змейка, основной юнит игры"""
-    def __init__(self, field, all_snakes, brain, positions, head, reproductive = True, max_length = 16, min_length = 3, mutating = True, chance = 1/4, hungry = True, time_limit = 20):
+    def __init__(self, field, all_snakes, brain, positions, head, reproductive = True, max_length = 16, min_length = 3, mutating = True, chance = 1/4, hungry = True, time_limit = 20, autofood = False):
         """Создает змейку
         field: игровое поле типа Field
         all_snakes: список всех змеек в игре
@@ -272,7 +285,8 @@ class Snake():
         mutating: bool, показывает, меняется ли мозг змейки при делении.
         chance: шанс в долях единицы, с которым мозг змейки изменится при делении.
         hungry: bool. Показывает, подвержена ли змейка голоду.
-        time_limit: целое число, показывает, сколько ходов змейка может прожить без вреда для здоровья."""
+        time_limit: целое число, показывает, сколько ходов змейка может прожить без вреда для здоровья.
+        autofood: bool, показывает, нужно ли генерировать еду после ее съедения."""
         self.field = field
         self.all_snakes = all_snakes
         self.direction = ['up', 'right', 'down', 'left']
@@ -291,6 +305,7 @@ class Snake():
         self.hungry = hungry
         self.time_limit = time_limit
         self.suplies = time_limit
+        self.autofood = autofood
         for i in self.positions:
             self.field[i] = -1
         self.generation = 1
@@ -338,6 +353,8 @@ class Snake():
             self.field[self.head] = -1
         else:
             if (self.field[self.head + step_coord[decision]] == 1):
+                if (self.autofood):
+                    self.field.MakeOneFood()
                 self.head += step_coord[decision]
                 self.positions = [self.head] + self.positions
                 self.field[self.head] = -1    
