@@ -2,6 +2,7 @@ import os
 import time
 import random
 from snake import *  
+from datetime import datetime
 
 def championship(brain, TIME = 400, FOOD = 35):
     all_snakes = []
@@ -40,15 +41,20 @@ def analise(dir_name, file, start_snake = 0, TIMES = 200):
     results = []
     for i in range(start_snake, len(brains)):
         avg = 0
+        comp_start = datetime.now()
         for competition in range(TIMES):
+            start = datetime.now()
             curr = championship(brains[i])
             avg += curr
             tab = ' '*(len(str(TIMES))-len(str(competition+1)))
             print(f'Step{step}k. Snake {i+1}/16. Round {competition+1}/{TIMES}: ', end=tab)
-            print("%.2f" % curr)
+            print("%.2f" % curr, end=' ')
+            now = datetime.now()
+            print(f' |  {"%.6f" % ((now - start).seconds + (now - start).microseconds/1000000)} sec')
         avg /= TIMES
         results.append(avg)
-        print(f'Result: {results[-1]}')
+        now = datetime.now()
+        print(f'Result: {results[-1]}  |  {((now - start).seconds + (now - comp_start).seconds)} sec')
         print("SAVING...")
         try:
             os.mkdir(f'Analise/{step}/Snake{i+1}')
