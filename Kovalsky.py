@@ -21,6 +21,7 @@ def championship(brain, TIME = 400, FOOD = 35):
     return ans / 6
     
 def analise(dir_name, file, start_snake = 0, TIMES = 200):
+    start_snake = min(start_snake, 0)
     step = int(file[4:-5])
     path_to_file = f'Analise/{step}/data.txt'
     try:
@@ -47,7 +48,7 @@ def analise(dir_name, file, start_snake = 0, TIMES = 200):
             curr = championship(brains[i])
             avg += curr
             tab = ' '*(len(str(TIMES))-len(str(competition+1)))
-            print(f'Step{step}k. Snake {i+1}/16. Round {competition+1}/{TIMES}: ', end=tab)
+            print(f'Step{step}k. Snake {i+1}/{len(brains)}. Round {competition+1}/{TIMES}: ', end=tab)
             print("%.2f" % curr, end=' ')
             now = datetime.now()
             print(f' |  {"%.6f" % ((now - start).seconds + (now - start).microseconds/1000000)} sec')
@@ -64,10 +65,6 @@ def analise(dir_name, file, start_snake = 0, TIMES = 200):
         curr_snake.write(str(avg))
         curr_snake.close()
         print()
-    results.sort()
-    file = open(path_to_file, 'w')
-    file.write(str(sum(results[-4:])/4))
-    file.close()
     
 def draw(data):
     pass
@@ -91,6 +88,6 @@ def main():
         i = files[ind]
         if (i[:4] == 'Step' and i[-5:] == 'k.txt' and (int(i[4:-5]) % 500 == 0) and (int(i[4:-5]) >= step)):
             if (int(i[4:-5]) >= step):
-                start_snake = 0
+                snake_num = 0
             analise(dir_name, i, start_snake = snake_num)
 main()

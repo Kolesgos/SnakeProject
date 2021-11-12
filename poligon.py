@@ -6,8 +6,8 @@ import time
 
 field = Field('Fields/Void.txt', numbers = True)
 all_snakes = []
-food_limit = 100
-TIMELIMIT = 10
+food_limit = 70
+TIMELIMIT = 8
 head = Point(2, 2)
 
 n = 3
