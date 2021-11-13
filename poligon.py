@@ -6,8 +6,8 @@ import time
 
 field = Field('Fields/Void.txt', numbers = True)
 all_snakes = []
-food_limit = 70
-TIMELIMIT = 8
+food_limit = 80
+TIMELIMIT  = 6
 head = Point(2, 2)
 
 n = 3
@@ -91,16 +91,22 @@ field.make_food(food_limit)
 curr_time = datetime.now()
 saving_time = datetime.now()
 while (len(all_snakes) != 0):
+    dead_snakes = []
     counter += 1
     for i in all_snakes:
         if (i.is_alive):
             i.step()
         else:
+            dead_snakes.append(i)
             all_snakes.remove(i)
     
     if (counter % 100 == 0):
         now = datetime.now()
-        print(f'{counter/1000}k: {len(all_snakes)}  |  {"%.2f" % ((now - curr_time).seconds + (now - curr_time).microseconds/1000000)} sec')
+        avg = 0
+        for snake in all_snakes:
+            avg += len(snake.positions)
+        avg /= len(all_snakes)
+        print(f'{counter/1000}k  |   all: {len(all_snakes)}{" "*(2-len(str(len(all_snakes))))}, avg: {"%.2f" % avg}{" "*(2-len(str(int(avg))))}   |  {"%.2f" % ((now - curr_time).seconds + (now - curr_time).microseconds/1000000)} sec')
         curr_time = datetime.now()
         if (counter % 50000 == 0):
             now = datetime.now()
@@ -112,7 +118,6 @@ while (len(all_snakes) != 0):
                 output += str(i.brain) + '\n------------------------------\n' + str(i) + '\n####################################\n'
             file.write(output)
             file.close()    
-    
     
     '''if (counter % 10 == 0):
         print(counter)
@@ -139,4 +144,6 @@ while (len(all_snakes) != 0):
             print('Error')
         key = input()'''
     #field.tick()
+    
 print("ALL DEAD")
+print(*dead_snakes, sep = '\n\n')
