@@ -5,10 +5,13 @@ from snake import *
 import time
 
 field = Field('Fields/Void.txt', numbers = True)
+brains_dir = "Brains2"
 all_snakes = []
 food_limit = 80
-TIMELIMIT  = 6
+TIMELIMIT  = 8
 head = Point(2, 2)
+
+print(f"\nData is saving to {brains_dir}/...\n")
 
 n = 3
 wall = []
@@ -60,7 +63,7 @@ counter = 0
 if (input('Continue? Y/N\n').lower() == 'y'):
     ############################
     num_of_step = int(input("Enter the number of step:\n"))
-    path = f'Brains/Step{num_of_step}k.txt'
+    path = f'{brains_dir}/Step{num_of_step}k.txt'
     counter = num_of_step * 1000
     ############################
     for i in all_snakes:
@@ -80,7 +83,7 @@ if (input('Continue? Y/N\n').lower() == 'y'):
 else:
     if (input('Resave 0 file? Y/N\n').lower() == 'y'):
         print(f'-------------------\nSAVING...\nStep{counter//1000}k.txt\n-------------------\n')
-        file = open(f'Brains/Step{counter//1000}k.txt', 'w')
+        file = open(f'{brains_dir}/Step{counter//1000}k.txt', 'w')
         output = ''
         for i in all_snakes:
             output += str(i.brain) + '\n------------------------------\n' + str(i) + '\n####################################\n'
@@ -110,9 +113,9 @@ while (len(all_snakes) != 0):
         curr_time = datetime.now()
         if (counter % 50000 == 0):
             now = datetime.now()
-            print(f'-------------------\nSAVING Step{counter//1000}k.txt  |  {"%.2f" % ((now - saving_time).seconds + (now - saving_time).microseconds/1000000)} sec\n-------------------')
+            print(f'-------------------\nSAVING Step{counter//1000}k.txt  |  {"%.2f" % ((now - saving_time).seconds/60)} min\n-------------------')
             saving_time = datetime.now()
-            file = open(f'Brains/Step{counter//1000}k.txt', 'w')
+            file = open(f'{brains_dir}/Step{counter//1000}k.txt', 'w')
             output = ''
             for i in all_snakes:
                 output += str(i.brain) + '\n------------------------------\n' + str(i) + '\n####################################\n'
@@ -125,7 +128,7 @@ while (len(all_snakes) != 0):
             print(f'-------------------\n{counter/1000}k: {len(all_snakes)}\n-------------------\n', end='')
             if (counter % 1000 == 0):
                 print(f'-------------------\nSAVING...\nStep{counter//1000}k.txt\n-------------------\n')
-                file = open(f'Brains/Step{counter//1000}k.txt', 'w')
+                file = open(f'{brains_dir}/Step{counter//1000}k.txt', 'w')
                 output = ''
                 for i in all_snakes:
                     output += str(i.brain) + '\n------------------------------\n' + str(i) + '\n####################################\n'

@@ -271,7 +271,7 @@ class Point():
 
 class Snake():
     """Змейка, основной юнит игры"""
-    def __init__(self, field, all_snakes, brain, positions, head, reproductive = True, max_length = 16, min_length = 3, mutating = True, chance = 1/4, hungry = True, time_limit = 20, autofood = False):
+    def __init__(self, field, all_snakes, brain, positions, head, reproductive = True, max_length = 16, min_length = 3, mutating = True, chance = 1/4, hungry = True, time_limit = 20, autofood = False, delete_body = True):
         """Создает змейку
         field: игровое поле типа Field
         all_snakes: список всех змеек в игре
@@ -306,6 +306,7 @@ class Snake():
         self.time_limit = time_limit
         self.suplies = time_limit
         self.autofood = autofood
+        self.delete_body = delete_body
         for i in self.positions:
             self.field[i] = -1
         self.generation = 1
@@ -389,8 +390,9 @@ class Snake():
         """Смерть змейки."""
         self.is_alive = False
         self.reason_of_death = reason
-        for i in self.positions:
-            self.field[i] = 0
+        if (self.delete_body):
+            for i in self.positions:
+                self.field[i] = 0
         
     def __repr__(self):
         if (self.is_alive):

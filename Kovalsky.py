@@ -1,6 +1,7 @@
 import os
 import time
 import random
+from draw import *
 from snake import *  
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -10,7 +11,7 @@ def championship(brain, TIME = 400, FOOD = 70):
     field = Field('Fields/Field.txt')
     for i in range(6):
         positions = [Point(10, i+1), Point(11, i+1), Point(12, i+1)]
-        all_snakes.append(Snake(field, all_snakes, brain, positions, positions[0], reproductive = False, hungry = False, autofood = True))
+        all_snakes.append(Snake(field, all_snakes, brain, positions, positions[0], reproductive = False, hungry = False, autofood = True, delete_body = False))
     field.make_food(FOOD)
     for step in range(TIME+1):
         for snake in all_snakes:
@@ -21,15 +22,15 @@ def championship(brain, TIME = 400, FOOD = 70):
         ans += len(snake.positions)
     return ans / 6
     
-def analise(dir_name, file, start_snake = 0, TIMES = 200):
+def analise(file, start_snake = 0, TIMES = 200, brains_dir = "Brains", save_dir = "Analise"):
     start_snake = max(start_snake, 0)
     step = int(file[4:-5])
-    path_to_file = f'Analise/{step}/data.txt'
+    path_to_file = f'{save_dir}/{step}/data.txt'
     try:
-        os.mkdir(f'Analise/{step}')
+        os.mkdir(f'{save_dir}/{step}')
     except:
         pass    
-    file = open(dir_name+'/'+file, 'r')
+    file = open(brains_dir+'/'+file, 'r')
     data = file.read()[:-1]
     file.close()
     data = data.split('\n####################################\n')
@@ -48,65 +49,48 @@ def analise(dir_name, file, start_snake = 0, TIMES = 200):
             curr = championship(brains[i])
             avg += curr
             tab = ' '*(len(str(TIMES))-len(str(competition+1)))
-            print(f'Step{step}k. Snake {i+1}/{len(brains)}. Round {competition+1}/{TIMES}: ', end=tab)
+            print(f'Ep.{num_of_experiment}. Step{step}k. Snake {i+1}/{len(brains)}. Round {competition+1}/{TIMES}: ', end=tab)
             print("%.2f" % curr, end=' '*(5-len("%.2f" % curr)))
             now = datetime.now()
-            print(f' |  {"%.6f" % ((now - start).seconds + (now - start).microseconds/1000000)} sec')
+            print(f' |  {"%.2f" % ((now - start).seconds + (now - start).microseconds/1000000)} sec')
         avg /= TIMES
         now = datetime.now()
         print(f'Result: {avg}  |  {"%.2f" % ((now - comp_start).seconds/60)} min')
         print("SAVING...")
         try:
-            os.mkdir(f'Analise/{step}/Snake{i+1}')
+            os.mkdir(f'{save_dir}/{step}/Snake{i+1}')
         except:
             pass         
-        curr_snake = open(f'Analise/{step}/Snake{i+1}/data.txt', 'w')
+        curr_snake = open(f'{save_dir}/{step}/Snake{i+1}/data.txt', 'w')
         curr_snake.write(str(avg))
         curr_snake.close()
         print()
-    
-def drawStep():
-    dirr_name = "Analise"
-    files = os.listdir(dirr_name)
-    files.sort(key = lambda x: int(x)) 
-    X = []
-    Y = []
-    for ind1 in range(len(files)):
-        dirr = files[ind1]
-        results = []
-        dirr_files = os.listdir(f'{dirr_name}/{dirr}')
-        for ind2 in range(len(dirr_files)):
-            file = open(f'{dirr_name}/{dirr}/{dirr_files[ind2]}/data.txt', 'r')
-            results.append(float(file.read()))
-        results.sort()
-        ans = sum(results[-4:])/4
-        if (len(results) < 4):
-            ans = sum(results)/len(results)
-        X.append(int(dirr)/1000)
-        Y.append(ans)
-    fig, axs = plt.subplots()
-    axs.scatter(X, Y, s = 5)
-    axs.plot(X, Y)
-
-def TakeData():
-    pass
 
 if __name__ == '__main__':
-    dir_name = "Brains"
-    files = os.listdir(dir_name)
+    brains_dir = "Brains"
+    save_dir   = "Analise"
+    
+    num_of_experiment = input("Enter number of experiment: ")
+    brains_dir += num_of_experiment
+    save_dir += num_of_experiment
+    
+    files = os.listdir(brains_dir)
     files.sort(key = lambda x: int(x[4:-5]))
     step = 0
-    snake_num = 0
     if (input('Continue? Y/N\n').lower() == 'y'):
         step = int(input("Enter the number of step:\n"))
         snake_num = int(input("Enter the number of snake:\n"))
         snake_num -= 1
-    if (step == 0):
-        analise(dir_name, files[0])
+    else:
+        snake_num = 0
+        
+    shift = int(input("Enter the shift:\n")) 
+    module = int(input("Enter the module:\n"))
+        
     for ind in range(len(files)):
         i = files[ind]
-        if (i[:4] == 'Step' and i[-5:] == 'k.txt' and (int(i[4:-5]) % 500 == 0) and (int(i[4:-5]) >= step)):
+        if (i[:4] == 'Step' and i[-5:] == 'k.txt' and ((int(i[4:-5]) + shift) % module == 0) and (int(i[4:-5]) >= step)):
             if (int(i[4:-5]) > step):
                 snake_num = 0
-            analise(dir_name, i, start_snake = snake_num)
-    drawStep()
+            analise(i, start_snake = snake_num, brains_dir = brains_dir, save_dir = save_dir)
+    drawStep(dirr_name = save_dir)
