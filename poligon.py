@@ -4,14 +4,21 @@ from datetime import datetime
 from snake import *
 import time
 
-field = Field('Fields/Void.txt', numbers = True)
-brains_dir = "Brains2"
+def SavePopulation(dirr_name, population):
+    file = open(f'{dirr_name}/population.txt', 'a')
+    for i in population:
+        file.write(str(i[0]) + ' ' + str(i[1]) + '\n')
+    file.close()
+
+field = Field('Fields/CompField.txt', numbers = True)
+brains_dir = "Brains1"
 all_snakes = []
-food_limit = 80
+food_limit = 70
 TIMELIMIT  = 8
-head = Point(2, 2)
 
 print(f"\nData is saving to {brains_dir}/...\n")
+#file = open(f'{brains_dir}/population.txt', 'w')
+#file.close()
 
 n = 3
 wall = []
@@ -20,39 +27,38 @@ for i in range(2*n+1):
     wall.append([])
     food.append([])
     for j in range(2*n+1):
-        wall[-1].append({'up': random.randint(-5, 5), 
-                         'right': random.randint(-5, 5),
-                         'down': random.randint(-5, 5),
-                         'left': random.randint(-5, 5)})
-        food[-1].append({'up': random.randint(-5, 5), 
-                         'right': random.randint(-5, 5),
-                         'down': random.randint(-5, 5),
-                         'left': random.randint(-5, 5)})
-wall[n-1][n]['up']    = -20
-wall[n][n-1]['left']  = -20
-wall[n][n+1]['right'] = -20
-wall[n+1][n]['down']  = -20
-food[n][n-1]['left']  = 20
-food[n][n+1]['right'] = 20
-food[n+1][n]['down']  = 20
-food[n-1][n]['up']    = 20
+        wall[-1].append({'up': 0, 'right': 0, 'down': 0, 'left': 0})
+        food[-1].append({'up': 0, 'right': 0, 'down': 0, 'left': 0})
+        
+wall[n-1][n]['up']    = -30
+wall[n][n-1]['left']  = -30
+wall[n][n+1]['right'] = -30
+wall[n+1][n]['down']  = -30
+wall[n-2][n]['up']    = -10
+wall[n][n-2]['left']  = -10
+wall[n][n+2]['right'] = -10
+wall[n+2][n]['down']  = -10
 
-wall[n][n]['up']    = 0
-wall[n][n]['left']  = 0
-wall[n][n]['right'] = 0
-wall[n][n]['down']  = 0
-food[n][n]['left']  = 0
-food[n][n]['right'] = 0
-food[n][n]['down']  = 0
-food[n][n]['up']    = 0
+food[n][n-1]['left']  = 50
+food[n][n+1]['right'] = 50
+food[n+1][n]['down']  = 50
+food[n-1][n]['up']    = 50
+food[n][n-2]['left']  = 30
+food[n][n+2]['right'] = 30
+food[n+2][n]['down']  = 30
+food[n-2][n]['up']    = 30
 
 brain = Brain(wall, food)
 
-positions = [head, Point(2, 3), Point(2, 4), Point(3, 4)]
+for i in range(30):
+    brain = brain.mutate()
 
-snake = Snake(field, all_snakes, brain, positions, head, chance = 1/4, time_limit = TIMELIMIT, max_length = 16, min_length = 4, autofood = True)
-
-all_snakes.append(snake)
+for i in range(5):
+    ind = i*5+5
+    head = Point(2, ind)
+    positions = [head, Point(3, ind), Point(4, ind), Point(5, ind)]
+    snake = Snake(field, all_snakes, brain, positions, head, chance = 1/4, time_limit = TIMELIMIT, max_length = 16, min_length = 4, autofood = True)
+    all_snakes.append(snake)
 
 for i in positions:
     field[i] = -1
@@ -93,6 +99,7 @@ else:
 field.make_food(food_limit)
 curr_time = datetime.now()
 saving_time = datetime.now()
+population = []
 while (len(all_snakes) != 0):
     dead_snakes = []
     counter += 1
@@ -110,8 +117,9 @@ while (len(all_snakes) != 0):
             avg += len(snake.positions)
         avg /= len(all_snakes)
         print(f'{counter/1000}k  |   all: {len(all_snakes)}{" "*(2-len(str(len(all_snakes))))}, avg: {"%.2f" % avg}{" "*(2-len(str(int(avg))))}   |  {"%.2f" % ((now - curr_time).seconds + (now - curr_time).microseconds/1000000)} sec')
+        population.append([counter, len(all_snakes)])
         curr_time = datetime.now()
-        if (counter % 50000 == 0):
+        if (counter % 5000 == 0):
             now = datetime.now()
             print(f'-------------------\nSAVING Step{counter//1000}k.txt  |  {"%.2f" % ((now - saving_time).seconds/60)} min\n-------------------')
             saving_time = datetime.now()
@@ -120,7 +128,9 @@ while (len(all_snakes) != 0):
             for i in all_snakes:
                 output += str(i.brain) + '\n------------------------------\n' + str(i) + '\n####################################\n'
             file.write(output)
-            file.close()    
+            file.close()  
+            SavePopulation(brains_dir, population)  
+            population = []
     
     '''if (counter % 10 == 0):
         print(counter)
@@ -148,5 +158,7 @@ while (len(all_snakes) != 0):
         key = input()'''
     #field.tick()
     
-print("ALL DEAD")
 print(*dead_snakes, sep = '\n\n')
+print(f"\nALL DEAD\nStep: {counter}")
+SavePopulation(brains_dir, population)
+

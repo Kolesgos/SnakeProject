@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 def championship(brain, TIME = 400, FOOD = 70):
     all_snakes = []
-    field = Field('Fields/Field.txt')
+    field = Field('Fields/CompField.txt')
     for i in range(6):
         positions = [Point(10, i+1), Point(11, i+1), Point(12, i+1)]
         all_snakes.append(Snake(field, all_snakes, brain, positions, positions[0], reproductive = False, hungry = False, autofood = True, delete_body = False))
@@ -75,6 +75,7 @@ if __name__ == '__main__':
     save_dir += num_of_experiment
     
     files = os.listdir(brains_dir)
+    files = list(filter(lambda x: x[4:-5].isdigit(), files))
     files.sort(key = lambda x: int(x[4:-5]))
     step = 0
     if (input('Continue? Y/N\n').lower() == 'y'):

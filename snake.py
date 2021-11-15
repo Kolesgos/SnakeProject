@@ -311,6 +311,14 @@ class Snake():
             self.field[i] = -1
         self.generation = 1
     
+    def hide_body(self):
+        for i in self.positions:
+            self.field[i] = 0
+            
+    def show_body(self):
+        for i in self.positions:
+            self.field[i] = -1       
+    
     def make_decision(self):
         """Возвращает направление (up, right, down или left), в котором змейка решает двигаться."""
         arr = [0, 0, 0, 0]
