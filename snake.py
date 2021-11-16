@@ -3,11 +3,20 @@ import copy
 import random
 
 class Field():
-    """Игровое поле для змеек"""
+
+    """ Playing field for snakes """
+
     def __init__(self, path_to_file, numbers = False, time = 20):
-        """Создает поле по файлу <path_to_file>.
-        Numbers: bool, показывает, нужно ли при выводе печатать индексы строк и столбцов
-        Time: уелое число, показывает, через сколько ходов на пустой клетке появится еда."""
+        """Creates the field from file <path_to_file>
+        
+        Keyword arguments:
+        self            -- class instance
+        path_to_file    -- path to the field file
+        numbers         -- is it needed to print indexes of strings and colums
+        time            -- integer number that shows after what number of moves
+                           food appears on the cell
+
+        """
         self.data = []
         self.time = time
         file = open(path_to_file, 'r')
@@ -27,12 +36,17 @@ class Field():
                     self.data[-1].append(j)
         self.x = len(self.data)
         self.y = len(self.data[0])
-        self.Timer = [[random.randint(1, time-1) for j in range(self.y)] for i in range(self.x)]
+        self.Timer = [[random.randint(1, time-1)
+                       for j in range(self.y)] for i in range(self.x)]
         self.numbers = numbers
         
     def tick(self):
-        """Игровое поле делает 1 ход. Если таймер клетки сработал и она пустая, в ней появляется еда.
-           Каждый ход тикают только таймеры пустых клеток."""
+        """Playing field moves one time.
+
+        If the timer of cell expires and this cell is not filled the food appears
+        in it. Every move increases the timer of not filled cells only.
+
+        """
         for i in range(self.x):
             for j in range(self.y):
                 if (self.data[i][j] == 0):
@@ -41,7 +55,15 @@ class Field():
                         self.data[i][j] = 1
               
     def get_str_slice(self, top_left, bot_right, frame = False):
-        """Возвращает строковое представление части игрового поля (с левой верхней точки до правой нижней не включительно)"""
+        """Returns the visible for snake part of field
+
+        Keyword arguments:
+        top_left        -- top left coord of visible part
+        bot_right       -- bottom left coord of visible part
+        frame           -- boolian value which is needed to be true if you want
+                           '_' to be displayed above and below
+
+        """
         ans = ''
         if (frame):
             ans += '_'*(bot_right.x - top_left.x) + '\n'
@@ -63,7 +85,14 @@ class Field():
         return ans[:-1]
                     
     def make_food(self, n):
-        """Создает n единиц еды в случайных пустых клетках поля. Возвращает количество еды, которую не удалось разместить."""
+        """Tries to create <n> number of food on field
+
+        Keyword arguments:
+        n       -- number of food to create
+
+        Returns number of food we could not create
+
+        """
         empty = []
         for i in range(len(self.data)):
             for j in range(len(self.data[i])):
@@ -75,7 +104,7 @@ class Field():
         return max(0, n - len(empty))
     
     def count_food(self):
-        '''Возвращает количество еды на поле.'''
+        """ Returns number of food on field. """
         ans = 0
         for i in range(len(self.data)):
             for j in range(len(self.data[i])):
@@ -106,7 +135,15 @@ class Field():
         return ans
     
     def __getitem__(self, item_):
-        """Обычный __getitem__, но с той разницей, что поле замкнуто само на себя по вертикали и горизонтали."""
+        """Returns the data that corresponds to key==<item_>
+
+        The field closed to itself vertically and horizontally.
+
+        Keyward argument:
+        item_       -- value could be instance of Point class or the number. If it
+                       is a number it works a lot slowly.
+
+        """
         item = copy.deepcopy(item_)
         if (isinstance(item, Point)):
             if (item.x < 0):
@@ -125,6 +162,16 @@ class Field():
         return self.data[item]
     
     def __setitem__(self, key, value):
+        """Sets the data corresponded to key==<key> value.
+
+        The field closed to itself vertically and horizontally.
+
+        Keyward argument:
+        key         -- could be instance of Point class or integer number. It is
+                       the key to correspond the data
+        value       -- Value to be written in the data[key]
+
+        """
         if (isinstance(key, Point)):
             if (key.x < 0):
                 key.x -= (key.x // len(self.data))*len(self.data)
@@ -143,9 +190,19 @@ class Field():
         self.data[key] = copy.deepcopy(value)
 
 class Brain():
-    """Мозг для змейки. Линейный классификатор"""
+
+    """ Snake brain. Linear classifier. """
+
     def __init__(self, wall, food):
-        """Создает мозг для змейки из двух квадратных списков одного размера."""
+        """Creates snake's brain from two lists.
+
+        Keyward arguments:
+        wall        -- the list which is filled with masses of desision depended
+                       on previous one. Depends on how often snake ate walls.
+        food        -- the list which is filled with masses of desisin depended
+                       on previous one. Depends on how often snake ate food.
+
+        """
         if (not (len(wall) == len(wall[0]) == len(food) == len(food[0]))):
             raise ValueError("")
         self.direction = ['up', 'right', 'down', 'left']
@@ -154,37 +211,69 @@ class Brain():
         self.size = len(wall)
         
     def mutate(self, value = 5, position_of_mutation = 'random'):
-        """Возвращает мозг змейки, в котором элемент с позицией <position_of_mutation> 
-        изменяется на случайное целое число из диапазона от <-value> до <+value>. 
-        Если <position_of_mutation> не задана, то выбирается случайно."""
+        """Returns mutated brain of snake.
+
+        Element with psition <position_of_mutation> changes to a random number in
+        in range of [-<value>, <value>].
+        If <position_of_mutation> is not set, it selects randomly.
+
+        Keyward arguments:
+        value                   -- range of mutation magnitude
+        position_of_mutation    -- the name says all you need to know...
+
+        """
         if (value <= 0 or int(value) != value):
             raise ValueError("")
+
         if (position_of_mutation == 'random'):
-            position_of_mutation = [random.randint(0, self.size - 1), random.randint(0, self.size - 1)]
+            position_of_mutation = [random.randint(0, self.size - 1),
+                                    random.randint(0, self.size - 1)]
+
         new_brain = Brain(self.wall, self.food)
         if position_of_mutation == [(self.size-1)//2, (self.size-1)//2]:
             return new_brain
-        new_brain.wall[position_of_mutation[0]][position_of_mutation[1]][self.direction[random.randint(0,3)]] += random.randint(-value, value)
-        new_brain.food[position_of_mutation[0]][position_of_mutation[1]][self.direction[random.randint(0,3)]] += random.randint(-value, value)
+
+        new_brain.wall[position_of_mutation[0]]                 \
+                      [position_of_mutation[1]]                 \
+                      [self.direction[random.randint(0,3)]]     \
+                      += random.randint(-value, value)
+
+        new_brain.food[position_of_mutation[0]]                 \
+                      [position_of_mutation[1]]                 \
+                      [self.direction[random.randint(0,3)]]     \
+                      += random.randint(-value, value)
+
         return new_brain
     
     def __repr__(self):
         ans = 'Wall (up, right, down, left):\n'
         for i in range(self.size):
             for j in range(self.size):
-                ans += f"[{self.wall[i][j]['up']}, {self.wall[i][j]['right']}, {self.wall[i][j]['down']}, {self.wall[i][j]['left']}] "
+                ans += f"""[{self.wall[i][j]['up']},
+                            {self.wall[i][j]['right']},
+                            {self.wall[i][j]['down']},
+                            {self.wall[i][j]['left']}] """
             ans = ans[:-1]
             ans += '\n'
         ans += 'Food (up, right, down, left):\n'
         for i in range(self.size):
             for j in range(self.size):
-                ans += f"[{self.food[i][j]['up']}, {self.food[i][j]['right']}, {self.food[i][j]['down']}, {self.food[i][j]['left']}] "
+                ans += f"""[{self.food[i][j]['up']},
+                            {self.food[i][j]['right']},
+                            {self.food[i][j]['down']},
+                            {self.food[i][j]['left']}] """
             ans = ans[:-1]
-            ans += '\n'       
+            ans += '\n'
+
         return ans[:-1]
 
 def brain_from_text(data):
-    """Возвращает мозг, полученый из строки мозга (полученой методом чтения целиком файла)"""
+    """Returns brain that was converted from text file
+
+    Keyward argument:
+    data        -- text representation of brain
+
+    """
     data = data.split('\n')
     wall = []
     food = []
@@ -194,17 +283,28 @@ def brain_from_text(data):
         for j in data[i][1:-1].split('] ['):
             curr = j.split(', ')
             curr = list(map(int, curr))            
-            wall[-1].append({'up': curr[0], 'right': curr[1], 'down': curr[2], 'left': curr[3]})
+            wall[-1].append({'up': curr[0], 'right': curr[1],
+                             'down': curr[2], 'left': curr[3]})
     for i in range(n+2, 2*n+2):
         food.append([])
         for j in data[i][1:-1].split('] ['):
             curr = j.split(', ')
             curr = list(map(int, curr))  
-            food[-1].append({'up': curr[0], 'right': curr[1], 'down': curr[2], 'left': curr[3]})
+            food[-1].append({'up': curr[0], 'right': curr[1],
+                             'down': curr[2], 'left': curr[3]})
     ans = Brain(wall, food)
     return ans
 
 def snake_from_text(data, brain, field, all_snakes):
+    """Returns snake that was converted from text file.
+
+    Keyeard arguments:
+    data        -- text representation of snake
+    brain       -- brain of snake to be created
+    field       -- nothing to say there...
+    all_snakes  -- list of all snakes
+
+    """
     data = data.split('\n')
     head = Point(int(data[1][7:-1].split()[0]), int(data[1][7:-1].split()[1]))
     positions = []
@@ -227,7 +327,9 @@ def snake_from_text(data, brain, field, all_snakes):
     return snake
 
 class Point():
-    """Точка с заданными координатами"""
+
+    """ Point with set coords. """
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -241,13 +343,21 @@ class Point():
         return self.y
     
     def __add__(self, other):
-        """Возвращает точку, на которую укажет радиусвектор точки <other>, 
-        приложенный к точке <self>"""
+        """
+
+        Returns point on which will indicate radius vector of point <other>,
+        applied to the point <self>.
+
+        """
         return Point(self.x + other.x, self.y + other.y)
     
     def __mul__(self, other):
-        """Возвращает точку, на которую укажет радиусвектор точки <self>, 
-        умноженный на число <other>"""
+        """
+
+        Returns point on which wikk indicate radius vector of point <self>,
+        multiplied on value <other>
+
+        """
         return Point(self.x * other, self.y * other)
     
     def __sub__(self, other):
@@ -257,22 +367,34 @@ class Point():
         return self * (1 / other)
 
 class Snake():
-    """Змейка, основной юнит игры"""
-    def __init__(self, field, all_snakes, brain, positions, head, reproductive = True, max_length = 16, min_length = 3, mutating = True, chance = 1/4, hungry = True, time_limit = 20):
-        """Создает змейку
-        field: игровое поле типа Field
-        all_snakes: список всех змеек в игре
-        brain: мозг типа Brain
-        positions: список точек типа Point, координат тела змейки. Должен быть в 
-                   естественном порядке (от головы к хвосту).
-        head: координаты головы змейки типа Point
-        reproductive: bool, показывает способность змейки делиться
-        max_length: целое число. Длина, по достижении которой, змейка делится
-        min_length: целое число. Длина, при которой змейка больше не уменьшается от голода
-        mutating: bool, показывает, меняется ли мозг змейки при делении.
-        chance: шанс в долях единицы, с которым мозг змейки изменится при делении.
-        hungry: bool. Показывает, подвержена ли змейка голоду.
-        time_limit: целое число, показывает, сколько ходов змейка может прожить без вреда для здоровья."""
+
+    """ Snake. The main game unit. """
+
+    def __init__(self, field, all_snakes, brain, positions, head,               \
+                 reproductive = True, max_length = 16, min_length = 3,          \
+                 mutating = True, chance = 1/4, hungry = True, time_limit = 20):
+        """
+        Creates Snake. Sorry for gachimuchi.
+
+        Keyword arguments:
+        field           -- instance of class Field, playing field.
+        all_snakes      -- list of all snakes.
+        brain           -- instance of class Brain. Snake's brain.
+        position        -- list of instances of class Point, coords of snake's
+                           body. It sorted in natural order (from head to tail).
+        head            -- coords of snake's head.
+        reproductive    -- shows ability of snake to have $sex$ (children).
+        max_length      -- integer number. Length of the snake, when snake starts
+                           to have $sex$
+        min_length      -- integer number. Length of snake when snakes stops to
+                           decrease.
+        mutation        -- shows if brain changes when $sex$ is $cumming$
+        chance          -- chance of mutation.
+        hungry          -- shows if snake is hungry.
+        time_limit      -- integer number, whuch shows how much moves snakes can
+                           live without hunger and injure.
+
+        """
         self.field = field
         self.all_snakes = all_snakes
         self.direction = ['up', 'right', 'down', 'left']
@@ -296,7 +418,13 @@ class Snake():
         self.generation = 1
     
     def make_decision(self):
-        """Возвращает направление (up, right, down или left), в котором змейка решает двигаться."""
+        """
+
+        Returns moving direction (up, right, down, left),
+        in which snake is moving.
+
+        """
+
         arr = [0, 0, 0, 0]
         for i in range(self.vision * 2 + 1):
             for j in range(self.vision * 2 + 1):
@@ -321,7 +449,8 @@ class Snake():
         return self.direction[max_index[random.randint(0, len(max_index)-1)]]
     
     def step(self, direction_ = 'default'):
-        """Змейка делает 1 ход."""
+        """ Snake moves one time. """
+
         if not(self.is_alive):
             return
         step_coord = {'up': Point(-1, 0), 'right': Point(0, 1), 'down': Point(1, 0), 'left': Point(0, -1)}
@@ -354,7 +483,8 @@ class Snake():
                     self.death('Hunger')
     
     def divide(self):
-        """Змейка делится пополам, голова новой змейки - хвост старой."""
+        """ Snakes has $sex$. Head of new one - tail of the parent. """
+
         child = copy.deepcopy(self)
         if (self.mutating and (random.random() <= self.chance)):
             child.brain = self.brain.mutate()
@@ -369,7 +499,8 @@ class Snake():
         return child
         
     def death(self, reason = 'Unnown'):
-        """Смерть змейки."""
+        """ The death of the snake! """
+
         self.is_alive = False
         self.reason_of_death = reason
         for i in self.positions:
