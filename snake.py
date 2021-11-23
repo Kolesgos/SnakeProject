@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import copy
 import random
+import sys
 
 class Field():
 
@@ -19,9 +20,14 @@ class Field():
         """
         self.data = []
         self.time = time
-        file = open(path_to_file, 'r')
-        data = file.read()
-        file.close()
+
+        try:
+            file = open(path_to_file, 'r')
+            data = file.read()
+            file.close()
+        except (OSError, IOError):
+            sys.exit("Some problems with reading file: " + path_to_file)
+            
         self.data = []
         for i in data.split('\n'):
             self.data.append([])
@@ -47,6 +53,8 @@ class Field():
         in it. Every move increases the timer of not filled cells only.
 
         """
+
+        #! TODO: Maybe we can speed it up with numpy
         for i in range(self.x):
             for j in range(self.y):
                 if (self.data[i][j] == 0):
@@ -93,6 +101,9 @@ class Field():
         Returns number of food we could not create
 
         """
+
+        #! TODO: Maybe we can speed it up with numpy
+        # using numpy.where
         empty = []
         for i in range(len(self.data)):
             for j in range(len(self.data[i])):
@@ -105,6 +116,8 @@ class Field():
     
     def count_food(self):
         """ Returns number of food on field. """
+
+        #! TODO: Maybe we can speed it up with numpy
         ans = 0
         for i in range(len(self.data)):
             for j in range(len(self.data[i])):
@@ -203,8 +216,10 @@ class Brain():
                        on previous one. Depends on how often snake ate food.
 
         """
+
         if (not (len(wall) == len(wall[0]) == len(food) == len(food[0]))):
-            raise ValueError("")
+            raise ValueError("Lists must have the same length!!!")
+
         self.direction = ['up', 'right', 'down', 'left']
         self.wall = copy.deepcopy(wall)
         self.food = copy.deepcopy(food)
@@ -222,8 +237,9 @@ class Brain():
         position_of_mutation    -- the name says all you need to know...
 
         """
+
         if (value <= 0 or int(value) != value):
-            raise ValueError("")
+            raise ValueError("Not suitable value!")
 
         if (position_of_mutation == 'random'):
             position_of_mutation = [random.randint(0, self.size - 1),
@@ -453,7 +469,10 @@ class Snake():
 
         if not(self.is_alive):
             return
-        step_coord = {'up': Point(-1, 0), 'right': Point(0, 1), 'down': Point(1, 0), 'left': Point(0, -1)}
+
+        step_coord = {'up': Point(-1, 0), 'right': Point(0, 1),
+                      'down': Point(1, 0), 'left': Point(0, -1)}
+
         decision = self.make_decision()
         if (direction_ != 'default'):
             decision = direction_
@@ -462,7 +481,8 @@ class Snake():
             return
         if (self.field[self.head + step_coord[decision]] == 0):
             self.field[self.positions[-1]] = 0      
-            self.positions = [self.head + step_coord[decision]] + self.positions[:-1]
+            self.positions = [self.head + step_coord[decision]]  \
+                             + self.positions[:-1]
             self.head += step_coord[decision]
             self.field[self.head] = -1
         else:
@@ -471,7 +491,8 @@ class Snake():
                 self.positions = [self.head] + self.positions
                 self.field[self.head] = -1    
                 self.suplies = self.time_limit + 1
-                if (self.reproductive and (len(self.positions) >= self.max_length)):
+                if (self.reproductive and                       \
+                    (len(self.positions) >= self.max_length)):
                     self.all_snakes.append(self.divide())
         if (self.hungry):
             self.suplies -= 1
@@ -483,7 +504,7 @@ class Snake():
                     self.death('Hunger')
     
     def divide(self):
-        """ Snakes has $sex$. Head of new one - tail of the parent. """
+        """ Snake has $sex$. Head of new one - tail of the parent. """
 
         child = copy.deepcopy(self)
         if (self.mutating and (random.random() <= self.chance)):
@@ -526,3 +547,7 @@ class Snake():
                 ans += f'mutating: 0'
         ans += f'\nGeneration: {self.generation}'
         return ans
+
+if __name__ == "__main__":
+
+    print("Hello, World")
