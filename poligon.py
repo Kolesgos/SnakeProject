@@ -13,8 +13,9 @@ def SavePopulation(dirr_name, population):
 field = Field('Fields/CompField.txt', numbers = True)
 brains_dir = "Brains1"
 all_snakes = []
-food_limit = 70
+food_limit = 100
 TIMELIMIT  = 8
+CHANCE = 1/4
 
 print(f"\nData is saving to {brains_dir}/...\n")
 #file = open(f'{brains_dir}/population.txt', 'w')
@@ -54,7 +55,7 @@ for i in range(30):
     brain = brain.mutate()
 
 for i in range(5):
-    ind = i*5+5
+    ind = i*10+5
     head = Point(2, ind)
     positions = [head, Point(3, ind), Point(4, ind), Point(5, ind)]
     snake = Snake(field, all_snakes, brain, positions, head, chance = 1/4, time_limit = TIMELIMIT, max_length = 16, min_length = 4, autofood = True)
@@ -66,7 +67,8 @@ for i in positions:
 dead_snakes = []
 counter = 0
 
-if (input('Continue? Y/N\n').lower() == 'y'):
+key = input('Continue? Y/N\n').lower()
+if (key == 'y'):
     ############################
     num_of_step = int(input("Enter the number of step:\n"))
     path = f'{brains_dir}/Step{num_of_step}k.txt'
@@ -86,15 +88,17 @@ if (input('Continue? Y/N\n').lower() == 'y'):
         curr_snake.time_limit = TIMELIMIT
         curr_snake.autofood = True
         all_snakes.append(curr_snake)
+elif (key == 'n'):
+    print(f'-------------------\nSAVING...\nStep{counter//1000}k.txt\n-------------------\n')
+    file = open(f'{brains_dir}/Step{counter//1000}k.txt', 'w')
+    output = ''
+    for i in all_snakes:
+        output += str(i.brain) + '\n------------------------------\n' + str(i) + '\n####################################\n'
+    file.write(output)
+    file.close()    
 else:
-    if (input('Resave 0 file? Y/N\n').lower() == 'y'):
-        print(f'-------------------\nSAVING...\nStep{counter//1000}k.txt\n-------------------\n')
-        file = open(f'{brains_dir}/Step{counter//1000}k.txt', 'w')
-        output = ''
-        for i in all_snakes:
-            output += str(i.brain) + '\n------------------------------\n' + str(i) + '\n####################################\n'
-        file.write(output)
-        file.close()    
+    all_snakes = []
+    print("\n\nTRY AGAIN")
      
 field.make_food(food_limit)
 curr_time = datetime.now()
@@ -144,8 +148,11 @@ while (len(all_snakes) != 0):
                     output += str(i.brain) + '\n------------------------------\n' + str(i) + '\n####################################\n'
                 file.write(output)
                 file.close()  '''
-    """time.sleep(0.01)
-    print(field)"""
+    
+    '''if (len(all_snakes) <= 10):
+        time.sleep(0.02)
+        print(field)'''
+    
     '''key = input()
     while (key != ''):
         try:
@@ -160,5 +167,5 @@ while (len(all_snakes) != 0):
     
 print(*dead_snakes, sep = '\n\n')
 print(f"\nALL DEAD\nStep: {counter}")
-SavePopulation(brains_dir, population)
+#SavePopulation(brains_dir, population)
 
