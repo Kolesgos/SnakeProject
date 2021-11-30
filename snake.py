@@ -265,19 +265,19 @@ class Brain():
         ans = 'Wall (up, right, down, left):\n'
         for i in range(self.size):
             for j in range(self.size):
-                ans += f"""[{self.wall[i][j]['up']},
-                            {self.wall[i][j]['right']},
-                            {self.wall[i][j]['down']},
-                            {self.wall[i][j]['left']}] """
+                ans += f"[{self.wall[i][j]['up']}, "
+                ans += f"{self.wall[i][j]['right']}, " 
+                ans += f"{self.wall[i][j]['down']}, "
+                ans += f"{self.wall[i][j]['left']}] "
             ans = ans[:-1]
             ans += '\n'
         ans += 'Food (up, right, down, left):\n'
         for i in range(self.size):
             for j in range(self.size):
-                ans += f"""[{self.food[i][j]['up']},
-                            {self.food[i][j]['right']},
-                            {self.food[i][j]['down']},
-                            {self.food[i][j]['left']}] """
+                ans += f"[{self.food[i][j]['up']}, "
+                ans += f"{self.food[i][j]['right']}, "
+                ans += f"{self.food[i][j]['down']}, "
+                ans += f"{self.food[i][j]['left']}] "
             ans = ans[:-1]
             ans += '\n'
 
@@ -444,7 +444,8 @@ class Snake():
         arr = [0, 0, 0, 0]
         for i in range(self.vision * 2 + 1):
             for j in range(self.vision * 2 + 1):
-                point_on_field = self.head + Point(i, j) - Point(self.vision, self.vision)
+                point_on_field = self.head + Point(i, j) -          \
+                                 Point(self.vision, self.vision)
                 if (self.field[point_on_field] == -1):
                     arr[0] += self.brain.wall[i][j]['up']
                     arr[1] += self.brain.wall[i][j]['right']
@@ -547,7 +548,3 @@ class Snake():
                 ans += f'mutating: 0'
         ans += f'\nGeneration: {self.generation}'
         return ans
-
-if __name__ == "__main__":
-
-    print("Hello, World")
