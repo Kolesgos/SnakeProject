@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from snake import *
+from graph import *
+import pygame
+pygame.init()
 
 all_snakes = []
 field = Field('Fields/Field.txt')
@@ -37,12 +40,32 @@ for i in range(2*n+1):
 brain = Brain(wall, food)
 snake = Snake(field, all_snakes, brain, positions, head, reproductive = False, hungry = False)
 
+#-------------------------#
+graphics = Graphics(field, [0, 0], [500, 100], 18)
+direction  = ''
+decision   = ''
+#-------------------------#
+
 while (snake.is_alive):
+	
+	#-----------------------------------------------------------------------------#
+    if graphics.exit():
+    	pygame.display.quit()
+    	pygame.quit()
+    	break
+    graphics.print_field_school(field, direction, decision)
+    #-----------------------------------------------------------------------------#	
+	
     field.make_food(food_limit - field.count_food())
     decision = snake.make_decision()
-    print(field.get_str_slice(snake.head - Point(snake.vision, snake.vision), snake.head + Point(snake.vision + 1, snake.vision + 1), frame = True))
-    print(decision)
-    direction = get_direction(input())
+    #print(field.get_str_slice(snake.head - Point(snake.vision, snake.vision), snake.head + Point(snake.vision + 1, snake.vision + 1), frame = True))
+    #print(decision)
+    #direction = get_direction(input())
+    
+    #----------------------------------#
+    direction = graphics.get_direction()
+    #----------------------------------#
+    
     if (direction == '\\close'):
         break    
     if (direction[0] == '\\'):
@@ -52,7 +75,13 @@ while (snake.is_alive):
         continue
     if (decision == direction):
         snake.step()
+        
+        #------------------------------------------------------#
+        graphics.print_field_school(field, direction, decision)
+        #------------------------------------------------------#
+        
         continue
+        
     print("Correcting...")
     wall_correcting = []
     food_correcting = []
@@ -71,4 +100,8 @@ while (snake.is_alive):
     print('Food: ', end='')
     print(*food_correcting, sep = ' ')   
     snake.step(direction)
+    
+    #------------------------------------------------------#
+    graphics.print_field_school(field, direction, decision)
+    #------------------------------------------------------#
 print('Game Over')

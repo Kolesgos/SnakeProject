@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
+#TODO: SLIDERS
+
 from datetime import datetime
 from snake import *
+from graph import *
 import time
 
 def SavePopulation(dirr_name, population):
@@ -104,16 +107,33 @@ field.make_food(food_limit)
 curr_time = datetime.now()
 saving_time = datetime.now()
 population = []
+
+#------------------------------------------------------------------------#
+graphics = Graphics(field, [0, 0], [500, 100], 18)
+food_lim = Slider("Food limit", food_limit, 200, 0, [600, 100], graphics)
+time_lim = Slider("Time limit", TIMELIMIT, 20, 0, [600, 300], graphics)
+#------------------------------------------------------------------------#
+
 while (len(all_snakes) != 0):
     dead_snakes = []
     counter += 1
     for i in all_snakes:
         if (i.is_alive):
             i.step()
+            
         else:
             dead_snakes.append(i)
             all_snakes.remove(i)
-    
+        #--------------------------------------------------------------------#
+        graphics.print_field_polygon(all_snakes, field, food_limit, TIMELIMIT)
+
+        food_lim.is_active()
+        food_lim.draw()
+        time_lim.is_active()
+        time_lim.draw()
+        food_limit = food_lim.getVal()
+        TIMELIMIT  = time_lim.getVal() 
+        #--------------------------------------------------------------------#   
     if (counter % 100 == 0):
         now = datetime.now()
         avg = 0
