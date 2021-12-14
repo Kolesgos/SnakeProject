@@ -1,3 +1,21 @@
+"""
+This file-package is created for educational project.
+
+There you can find all the backend classes and all the
+stuff needed to simulate natural selection on snakes
+from pupular oldfag game "Snake"
+
+The documentation and tests were created by:
+    Egor Osipov (github: Grongr)
+The main part of all the backend were created by:
+    Nickolay Kovalenko (github: Kolesgos)
+The frontend and other graphics was made by:
+    Alyona Semyonova (github: jesuslovesyoutoday)
+"""
+
+__author__ = ('Kolesgos', 'Grongr', 'jesuslovesyoutoday')
+
+
 # -*- coding: utf-8 -*-
 import copy
 import random
