@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module snake</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>snake</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/grongr/learning/mipt/informatics/3sem/python/SnakeProject/snake.py">/home/grongr/learning/mipt/informatics/3sem/python/SnakeProject/snake.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;file-package&nbsp;is&nbsp;created&nbsp;for&nbsp;educational&nbsp;project.<br>
+&nbsp;<br>
+There&nbsp;you&nbsp;can&nbsp;find&nbsp;all&nbsp;the&nbsp;backend&nbsp;classes&nbsp;and&nbsp;all&nbsp;the<br>
+stuff&nbsp;needed&nbsp;to&nbsp;simulate&nbsp;natural&nbsp;selection&nbsp;on&nbsp;snakes<br>
+from&nbsp;pupular&nbsp;oldfag&nbsp;game&nbsp;"<a href="#Snake">Snake</a>"<br>
+&nbsp;<br>
+The&nbsp;documentation&nbsp;and&nbsp;tests&nbsp;were&nbsp;created&nbsp;by:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Egor&nbsp;Osipov&nbsp;(github:&nbsp;Grongr)<br>
+The&nbsp;main&nbsp;part&nbsp;of&nbsp;all&nbsp;the&nbsp;backend&nbsp;were&nbsp;created&nbsp;by:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Nickolay&nbsp;Kovalenko&nbsp;(github:&nbsp;Kolesgos)<br>
+The&nbsp;frontend&nbsp;and&nbsp;other&nbsp;graphics&nbsp;was&nbsp;made&nbsp;by:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Alyona&nbsp;Semyonova&nbsp;(github:&nbsp;jesuslovesyoutoday)</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="copy.html">copy</a><br>
+</td><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="snake.html#Brain">Brain</a>
+</font></dt><dt><font face="helvetica, arial"><a href="snake.html#Field">Field</a>
+</font></dt><dt><font face="helvetica, arial"><a href="snake.html#Point">Point</a>
+</font></dt><dt><font face="helvetica, arial"><a href="snake.html#Snake">Snake</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Brain">class <strong>Brain</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Brain">Brain</a>(wall,&nbsp;food)<br>
+&nbsp;<br>
+<a href="#Snake">Snake</a>&nbsp;brain.&nbsp;Linear&nbsp;classifier.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Brain-__init__"><strong>__init__</strong></a>(self, wall, food)</dt><dd><tt>Creates&nbsp;snake's&nbsp;brain&nbsp;from&nbsp;two&nbsp;lists.<br>
+&nbsp;<br>
+Keyward&nbsp;arguments:<br>
+wall&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;the&nbsp;list&nbsp;which&nbsp;is&nbsp;filled&nbsp;with&nbsp;masses&nbsp;of&nbsp;desision&nbsp;depended<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;previous&nbsp;one.&nbsp;Depends&nbsp;on&nbsp;how&nbsp;often&nbsp;snake&nbsp;ate&nbsp;walls.<br>
+food&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;the&nbsp;list&nbsp;which&nbsp;is&nbsp;filled&nbsp;with&nbsp;masses&nbsp;of&nbsp;desisin&nbsp;depended<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;previous&nbsp;one.&nbsp;Depends&nbsp;on&nbsp;how&nbsp;often&nbsp;snake&nbsp;ate&nbsp;food.</tt></dd></dl>
+
+<dl><dt><a name="Brain-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
+
+<dl><dt><a name="Brain-mutate"><strong>mutate</strong></a>(self, value=5, position_of_mutation='random')</dt><dd><tt>Returns&nbsp;mutated&nbsp;brain&nbsp;of&nbsp;snake.<br>
+&nbsp;<br>
+Element&nbsp;with&nbsp;psition&nbsp;&lt;position_of_mutation&gt;&nbsp;changes&nbsp;to&nbsp;a&nbsp;random&nbsp;number&nbsp;in<br>
+in&nbsp;range&nbsp;of&nbsp;[-&lt;value&gt;,&nbsp;&lt;value&gt;].<br>
+If&nbsp;&lt;position_of_mutation&gt;&nbsp;is&nbsp;not&nbsp;set,&nbsp;it&nbsp;selects&nbsp;randomly.<br>
+&nbsp;<br>
+Keyward&nbsp;arguments:<br>
+value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;range&nbsp;of&nbsp;mutation&nbsp;magnitude<br>
+position_of_mutation&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;the&nbsp;name&nbsp;says&nbsp;all&nbsp;you&nbsp;need&nbsp;to&nbsp;know...</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Field">class <strong>Field</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Field">Field</a>(path_to_file,&nbsp;numbers=False,&nbsp;time=20)<br>
+&nbsp;<br>
+Playing&nbsp;field&nbsp;for&nbsp;snakes<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Field-MakeOneFood"><strong>MakeOneFood</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Field-__getitem__"><strong>__getitem__</strong></a>(self, item_)</dt><dd><tt>Returns&nbsp;the&nbsp;data&nbsp;that&nbsp;corresponds&nbsp;to&nbsp;key==&lt;item_&gt;<br>
+&nbsp;<br>
+The&nbsp;field&nbsp;closed&nbsp;to&nbsp;itself&nbsp;vertically&nbsp;and&nbsp;horizontally.<br>
+&nbsp;<br>
+Keyward&nbsp;argument:<br>
+item_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;value&nbsp;could&nbsp;be&nbsp;instance&nbsp;of&nbsp;<a href="#Point">Point</a>&nbsp;class&nbsp;or&nbsp;the&nbsp;number.&nbsp;If&nbsp;it<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;a&nbsp;number&nbsp;it&nbsp;works&nbsp;a&nbsp;lot&nbsp;slowly.</tt></dd></dl>
+
+<dl><dt><a name="Field-__init__"><strong>__init__</strong></a>(self, path_to_file, numbers=False, time=20)</dt><dd><tt>Creates&nbsp;the&nbsp;field&nbsp;from&nbsp;file&nbsp;&lt;path_to_file&gt;<br>
+&nbsp;<br>
+Keyword&nbsp;arguments:<br>
+self&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;class&nbsp;instance<br>
+path_to_file&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;path&nbsp;to&nbsp;the&nbsp;field&nbsp;file<br>
+numbers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;is&nbsp;it&nbsp;needed&nbsp;to&nbsp;print&nbsp;indexes&nbsp;of&nbsp;strings&nbsp;and&nbsp;colums<br>
+time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;integer&nbsp;number&nbsp;that&nbsp;shows&nbsp;after&nbsp;what&nbsp;number&nbsp;of&nbsp;moves<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;food&nbsp;appears&nbsp;on&nbsp;the&nbsp;cell</tt></dd></dl>
+
+<dl><dt><a name="Field-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
+
+<dl><dt><a name="Field-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Sets&nbsp;the&nbsp;data&nbsp;corresponded&nbsp;to&nbsp;key==&lt;key&gt;&nbsp;value.<br>
+&nbsp;<br>
+The&nbsp;field&nbsp;closed&nbsp;to&nbsp;itself&nbsp;vertically&nbsp;and&nbsp;horizontally.<br>
+&nbsp;<br>
+Keyward&nbsp;argument:<br>
+key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;could&nbsp;be&nbsp;instance&nbsp;of&nbsp;<a href="#Point">Point</a>&nbsp;class&nbsp;or&nbsp;integer&nbsp;number.&nbsp;It&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;key&nbsp;to&nbsp;correspond&nbsp;the&nbsp;data<br>
+value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Value&nbsp;to&nbsp;be&nbsp;written&nbsp;in&nbsp;the&nbsp;data[key]</tt></dd></dl>
+
+<dl><dt><a name="Field-count_food"><strong>count_food</strong></a>(self)</dt><dd><tt>Returns&nbsp;number&nbsp;of&nbsp;food&nbsp;on&nbsp;field.</tt></dd></dl>
+
+<dl><dt><a name="Field-get_str_slice"><strong>get_str_slice</strong></a>(self, top_left, bot_right, frame=False)</dt><dd><tt>Returns&nbsp;the&nbsp;visible&nbsp;for&nbsp;snake&nbsp;part&nbsp;of&nbsp;field<br>
+&nbsp;<br>
+Keyword&nbsp;arguments:<br>
+top_left&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;top&nbsp;left&nbsp;coord&nbsp;of&nbsp;visible&nbsp;part<br>
+bot_right&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;bottom&nbsp;left&nbsp;coord&nbsp;of&nbsp;visible&nbsp;part<br>
+frame&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;boolian&nbsp;value&nbsp;which&nbsp;is&nbsp;needed&nbsp;to&nbsp;be&nbsp;true&nbsp;if&nbsp;you&nbsp;want<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'_'&nbsp;to&nbsp;be&nbsp;displayed&nbsp;above&nbsp;and&nbsp;below</tt></dd></dl>
+
+<dl><dt><a name="Field-make_food"><strong>make_food</strong></a>(self, n)</dt><dd><tt>Tries&nbsp;to&nbsp;create&nbsp;&lt;n&gt;&nbsp;number&nbsp;of&nbsp;food&nbsp;on&nbsp;field<br>
+&nbsp;<br>
+Keyword&nbsp;arguments:<br>
+n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;number&nbsp;of&nbsp;food&nbsp;to&nbsp;create<br>
+&nbsp;<br>
+Returns&nbsp;number&nbsp;of&nbsp;food&nbsp;we&nbsp;could&nbsp;not&nbsp;create</tt></dd></dl>
+
+<dl><dt><a name="Field-tick"><strong>tick</strong></a>(self)</dt><dd><tt>Playing&nbsp;field&nbsp;moves&nbsp;one&nbsp;time.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;timer&nbsp;of&nbsp;cell&nbsp;expires&nbsp;and&nbsp;this&nbsp;cell&nbsp;is&nbsp;not&nbsp;filled&nbsp;the&nbsp;food&nbsp;appears<br>
+in&nbsp;it.&nbsp;Every&nbsp;move&nbsp;increases&nbsp;the&nbsp;timer&nbsp;of&nbsp;not&nbsp;filled&nbsp;cells&nbsp;only.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Point">class <strong>Point</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Point">Point</a>(x,&nbsp;y)<br>
+&nbsp;<br>
+<a href="#Point">Point</a>&nbsp;with&nbsp;set&nbsp;coords.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Point-__add__"><strong>__add__</strong></a>(self, other)</dt><dd><tt>Returns&nbsp;point&nbsp;on&nbsp;which&nbsp;will&nbsp;indicate&nbsp;radius&nbsp;vector&nbsp;of&nbsp;point&nbsp;&lt;other&gt;,<br>
+applied&nbsp;to&nbsp;the&nbsp;point&nbsp;&lt;self&gt;.</tt></dd></dl>
+
+<dl><dt><a name="Point-__div__"><strong>__div__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Point-__getitem__"><strong>__getitem__</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="Point-__init__"><strong>__init__</strong></a>(self, x, y)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Point-__mul__"><strong>__mul__</strong></a>(self, other)</dt><dd><tt>Returns&nbsp;point&nbsp;on&nbsp;which&nbsp;wikk&nbsp;indicate&nbsp;radius&nbsp;vector&nbsp;of&nbsp;point&nbsp;&lt;self&gt;,<br>
+multiplied&nbsp;on&nbsp;value&nbsp;&lt;other&gt;</tt></dd></dl>
+
+<dl><dt><a name="Point-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
+
+<dl><dt><a name="Point-__sub__"><strong>__sub__</strong></a>(self, other)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Snake">class <strong>Snake</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Snake">Snake</a>(field,&nbsp;all_snakes,&nbsp;brain,&nbsp;positions,&nbsp;head,&nbsp;reproductive=True,&nbsp;max_length=16,&nbsp;min_length=3,&nbsp;mutating=True,&nbsp;chance=0.25,&nbsp;hungry=True,&nbsp;time_limit=20,&nbsp;autofood=False,&nbsp;delete_body=True)<br>
+&nbsp;<br>
+<a href="#Snake">Snake</a>.&nbsp;The&nbsp;main&nbsp;game&nbsp;unit.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Snake-__init__"><strong>__init__</strong></a>(self, field, all_snakes, brain, positions, head, reproductive=True, max_length=16, min_length=3, mutating=True, chance=0.25, hungry=True, time_limit=20, autofood=False, delete_body=True)</dt><dd><tt>Creates&nbsp;<a href="#Snake">Snake</a>.&nbsp;Sorry&nbsp;for&nbsp;gachimuchi.<br>
+&nbsp;<br>
+Keyword&nbsp;arguments:<br>
+field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;instance&nbsp;of&nbsp;class&nbsp;<a href="#Field">Field</a>,&nbsp;playing&nbsp;field.<br>
+all_snakes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;snakes.<br>
+brain&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;instance&nbsp;of&nbsp;class&nbsp;<a href="#Brain">Brain</a>.&nbsp;<a href="#Snake">Snake</a>'s&nbsp;brain.<br>
+position&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;instances&nbsp;of&nbsp;class&nbsp;<a href="#Point">Point</a>,&nbsp;coords&nbsp;of&nbsp;snake's<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body.&nbsp;It&nbsp;sorted&nbsp;in&nbsp;natural&nbsp;order&nbsp;(from&nbsp;head&nbsp;to&nbsp;tail).<br>
+head&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;coords&nbsp;of&nbsp;snake's&nbsp;head.<br>
+reproductive&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;shows&nbsp;ability&nbsp;of&nbsp;snake&nbsp;to&nbsp;have&nbsp;$sex$&nbsp;(children).<br>
+max_length&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;integer&nbsp;number.&nbsp;Length&nbsp;of&nbsp;the&nbsp;snake,&nbsp;when&nbsp;snake&nbsp;starts<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;have&nbsp;$sex$<br>
+min_length&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;integer&nbsp;number.&nbsp;Length&nbsp;of&nbsp;snake&nbsp;when&nbsp;snakes&nbsp;stops&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decrease.<br>
+mutation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;shows&nbsp;if&nbsp;brain&nbsp;changes&nbsp;when&nbsp;$sex$&nbsp;is&nbsp;$cumming$<br>
+chance&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;chance&nbsp;of&nbsp;mutation.<br>
+hungry&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;shows&nbsp;if&nbsp;snake&nbsp;is&nbsp;hungry.<br>
+time_limit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;integer&nbsp;number,&nbsp;whuch&nbsp;shows&nbsp;how&nbsp;much&nbsp;moves&nbsp;snakes&nbsp;can<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;live&nbsp;without&nbsp;hunger&nbsp;and&nbsp;injure.<br>
+autofood&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;shows&nbsp;is&nbsp;it&nbsp;needed&nbsp;to&nbsp;generate&nbsp;food&nbsp;after&nbsp;eating&nbsp;it</tt></dd></dl>
+
+<dl><dt><a name="Snake-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
+
+<dl><dt><a name="Snake-death"><strong>death</strong></a>(self, reason='Unnown')</dt><dd><tt>The&nbsp;death&nbsp;of&nbsp;the&nbsp;snake!</tt></dd></dl>
+
+<dl><dt><a name="Snake-divide"><strong>divide</strong></a>(self)</dt><dd><tt><a href="#Snake">Snake</a>&nbsp;has&nbsp;$sex$.&nbsp;Head&nbsp;of&nbsp;new&nbsp;one&nbsp;-&nbsp;tail&nbsp;of&nbsp;the&nbsp;parent.</tt></dd></dl>
+
+<dl><dt><a name="Snake-hide_body"><strong>hide_body</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Snake-make_decision"><strong>make_decision</strong></a>(self)</dt><dd><tt>Returns&nbsp;moving&nbsp;direction&nbsp;(up,&nbsp;right,&nbsp;down,&nbsp;left),<br>
+in&nbsp;which&nbsp;snake&nbsp;is&nbsp;moving.</tt></dd></dl>
+
+<dl><dt><a name="Snake-show_body"><strong>show_body</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Snake-step"><strong>step</strong></a>(self, direction_='default')</dt><dd><tt><a href="#Snake">Snake</a>&nbsp;moves&nbsp;one&nbsp;time.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-brain_from_text"><strong>brain_from_text</strong></a>(data)</dt><dd><tt>Returns&nbsp;brain&nbsp;that&nbsp;was&nbsp;converted&nbsp;from&nbsp;text&nbsp;file<br>
+&nbsp;<br>
+Keyward&nbsp;argument:<br>
+data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;text&nbsp;representation&nbsp;of&nbsp;brain</tt></dd></dl>
+ <dl><dt><a name="-snake_from_text"><strong>snake_from_text</strong></a>(data, brain, field, all_snakes)</dt><dd><tt>Returns&nbsp;snake&nbsp;that&nbsp;was&nbsp;converted&nbsp;from&nbsp;text&nbsp;file.<br>
+&nbsp;<br>
+Keyeard&nbsp;arguments:<br>
+data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;text&nbsp;representation&nbsp;of&nbsp;snake<br>
+brain&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;brain&nbsp;of&nbsp;snake&nbsp;to&nbsp;be&nbsp;created<br>
+field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;nothing&nbsp;to&nbsp;say&nbsp;there...<br>
+all_snakes&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;snakes</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">('Kolesgos',&nbsp;'Grongr',&nbsp;'jesuslovesyoutoday')</td></tr></table>
+</body></html>
