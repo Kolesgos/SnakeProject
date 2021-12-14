@@ -25,9 +25,9 @@ class Graphics():
         self.size    = size
         self.param   = p
         
-        self.surf = pygame.Surface((self.HEIGHT, self.WEIGHT))
+        self.surf     = pygame.Surface((self.HEIGHT, self.WEIGHT))
+        self.surf_all = pygame.Surface((self.HEIGHT, self.WEIGHT))
         
-        #self.sc = pygame.display.set_mode((self.HEIGHT + 500, self.WEIGHT + 100));      
         self.sc = pygame.display.set_mode((self.HEIGHT + size[0], self.WEIGHT + size[1]));      
         pygame.display.update()
     
@@ -93,7 +93,7 @@ class Graphics():
         self.sc.fill((0, 0, 0))
         
     
-    def print_field_comp(self, performer, field, snake, vision, fill, eaten, step):
+    def print_field_comp(self, performer, field, snake, fill):
         
         """ Draws snake and field with fog of war """
         
@@ -106,17 +106,20 @@ class Graphics():
         for j in range(len(field.data)):
             for i in range(len(field.data[j])):
                 point = Point(j, i)
-                if (point.x == 0) or (point.x == len(field.data) - 1) or (point.y == 0) or (point.y == len(field.data[0]) - 1):
+                """if (point.x == 0) or (point.x == len(field.data) - 1) or (point.y == 0) or (point.y == len(field.data[0]) - 1):
                     pygame.draw.rect(self.sc, (255, 0, 0), ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
                 if (field[point] == -1) and (abs(snake.positions[0].x - point.x) <= vision) and (abs(snake.positions[0].y - point.y) <= vision):
                     pygame.draw.rect(self.sc, color[1], ((i + self.pos[0])* self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
                 elif (field[point] == 1) and (abs(snake.positions[0].x - point.x) <= vision) and (abs(snake.positions[0].y - point.y) <= vision):
-                    pygame.draw.rect(self.sc, AQUA_MARINE, ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
-        self.print_text('Eaten by  ' + performer + "  :  " + str(eaten), pos[0])
-        self.print_text('Steps left: ' + str(step), pos[1])
+                    pygame.draw.rect(self.sc, AQUA_MARINE, ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)"""
+                if (point.x == 0) or (point.x == len(field.data) - 1) or (point.y == 0) or (point.y == len(field.data[0]) - 1):
+                    pygame.draw.rect(self.surf_all, (255, 0, 0), ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
+                if (field[point] == -1):
+                    pygame.draw.rect(self.surf_all, color[1], ((i + self.pos[0])* self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
+                elif (field[point] == 1):
+                    pygame.draw.rect(self.surf_all, AQUA_MARINE, ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
         if(fill):
-            pygame.display.flip()
-            pygame.display.update()
+            self.sc.blit(self.surf_all, (0, 250))
             self.sc.fill((0, 0, 0))
             
     def print_field_comp_sep(self, field, snake_h, snake, vision, fill, eaten_h, eaten, step):
@@ -131,29 +134,38 @@ class Graphics():
         for j in range(len(field.data)):
             for i in range(len(field.data[j])):
                 point = Point(j, i)
-                if (point.x == 0) or (point.x == len(field.data) - 1) or (point.y == 0) or (point.y == len(field.data[0]) - 1):
-                    pygame.draw.rect(self.sc, (255, 0, 0), ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
+                #if (point.x == 0) or (point.x == len(field.data) - 1) or (point.y == 0) or (point.y == len(field.data[0]) - 1):
+                #    pygame.draw.rect(self.sc, (255, 0, 0), ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
                 if (field[point] == -1) and (abs(snake_h.positions[0].x - point.x) <= vision) and (abs(snake_h.positions[0].y - point.y) <= vision):
                     pygame.draw.rect(self.sc, color_h[1], ((i + self.pos[0])* self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
                 elif (field[point] == 1) and (abs(snake_h.positions[0].x - point.x) <= vision) and (abs(snake_h.positions[0].y - point.y) <= vision):
                     pygame.draw.rect(self.sc, AQUA_MARINE, ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
+        
                     
         for j in range(len(field.data)):
             for i in range(len(field.data[j])):
                 point = Point(j, i)
-                if (point.x == 0) or (point.x == len(field.data) - 1) or (point.y == 0) or (point.y == len(field.data[0]) - 1):
-                    pygame.draw.rect(self.surf, (255, 0, 0), ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
+                #if (point.x == 0) or (point.x == len(field.data) - 1) or (point.y == 0) or (point.y == len(field.data[0]) - 1):
+                #    pygame.draw.rect(self.surf, (255, 0, 0), ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
                 if (field[point] == -1) and (abs(snake.positions[0].x - point.x) <= vision) and (abs(snake.positions[0].y - point.y) <= vision):
                     pygame.draw.rect(self.surf, color_ai[1], ((i + self.pos[0])* self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
                 elif (field[point] == 1) and (abs(snake.positions[0].x - point.x) <= vision) and (abs(snake.positions[0].y - point.y) <= vision):
-                    pygame.draw.rect(self.surf, AQUA_MARINE, ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)                    
+                    pygame.draw.rect(self.surf, AQUA_MARINE, ((i + self.pos[0]) * self.BLOCK_H, (j + self.pos[1]) * self.BLOCK_W, self.BLOCK_W/2, self.BLOCK_H/2), 0)
+               
+        self.print_field_comp("ai", field, snake, 0)
+        self.print_field_comp("human", field, snake_h, 0)                 
                     
         self.print_text('Eaten by human snake:    ' + str(eaten_h), pos_h[0])
         self.print_text('Eaten by machine snake:  ' + str(eaten), pos_ai[0])        
         self.print_text('Steps left: ' + str(step), pos_ai[1])
         
         self.sc.blit(self.surf, (0, 500))
-        self.surf.fill((0, 0, 0))        
+        self.surf.fill((0, 0, 0))
+        self.sc.blit(self.surf_all, (0, 250))
+        self.surf_all.fill((0, 0, 0))
+        
+        pygame.draw.rect(self.sc, (255, 0, 0), (self.pos[0] + 1, self.pos[1], self.HEIGHT, self.WEIGHT * 3), 3)
+                
         if(fill):
             pygame.display.flip()
             pygame.display.update()
